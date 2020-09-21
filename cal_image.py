@@ -217,9 +217,9 @@ for line in input_lines:
 		miriad.gpboot(**gpboot_input)
 
 		# Correct spectral slope based on flux cal model (probably overkill)
-		mfboot_input = {'vis':in_path+'/'+obsid+'/'+flux_cal+'.uv,'+in_path+'/'+obsid+'/'+gain_cal+'.uv',
-			'select':'source(1934-638)'}
-		miriad.mfboot(**mfboot_input)
+		# mfboot_input = {'vis':in_path+'/'+obsid+'/'+flux_cal+'.uv,'+in_path+'/'+obsid+'/'+gain_cal+'.uv',
+		#	'select':'source(1934-638)'}
+		# miriad.mfboot(**mfboot_input)
 
 
 	## -- Copy and apply bandpass and time-varying gain solutions to the target data -- ##
