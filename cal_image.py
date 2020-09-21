@@ -297,7 +297,7 @@ for line in input_lines:
 			'options':'%s'%(selfcal_options[selfcal_ind])}
 		miriad.selfcal(**selfcal_input)
 
-		if (selfcal_ind == len(selfcal_intervals)):
+		if (selfcal_ind == len(selfcal_intervals)-1):
 			
 			# Apply selfcal solutions
 			vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal'
