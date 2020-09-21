@@ -232,7 +232,7 @@ for line in input_lines:
 
 	# Apply solutions
 	uvcat_input = {'vis':in_path+'/'+obsid+'/'+target+'.uv',
-			'out':in_path+'/'+obsid+'/'+target+'.uv.cal0'}
+			'out':in_path+'/'+obsid+'/'+target+'.uv.cal'}
 	miriad.uvcat(**uvcat_input)
 
 
@@ -244,7 +244,7 @@ for line in input_lines:
 	for selfcal_ind in range(0,len(selfcal_intervals)):
 
 		# image
-		vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal%d' % (selfcal_ind)
+		vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal'
 		map_file = in_path+'/'+obsid+'/'+target+'.mfs.imap.cal%d' % (selfcal_ind)
 		beam_file = in_path+'/'+obsid+'/'+target+'.mfs.ibeam.cal%d' % (selfcal_ind)
 		if not os.path.exists(map_file):
@@ -289,7 +289,7 @@ for line in input_lines:
 			miriad.restor(**restor_input)
 
 		# selfcal
-		vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal%d' % (selfcal_ind)
+		vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal'
 		selfcal_input = {'vis':vis_file,
 			'model':model_file,
 			'interval':'%f'%(selfcal_intervals[selfcal_ind]),
@@ -297,13 +297,19 @@ for line in input_lines:
 			'options':'%s'%(selfcal_options[selfcal_ind])}
 		miriad.selfcal(**selfcal_input)
 
-		# Apply selfcal solutions
-		vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal%d' % (selfcal_ind)
-		out_file = in_path+'/'+obsid+'/'+target+'.uv.cal%d' % (selfcal_ind+1)
-		if not os.path.exists(out_file):
-			uvcat_input = {'vis':vis_file,
-				'out':out_file}
-			miriad.uvcat(**uvcat_input)
+		if (selfcal_ind == len(selfcal_intervals)):
+			
+			# Apply selfcal solutions
+			vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal'
+			out_file = in_path+'/'+obsid+'/'+target+'.uv.cal.tmp'
+			if not os.path.exists(out_file):
+				uvcat_input = {'vis':vis_file,
+					'out':out_file}
+				miriad.uvcat(**uvcat_input)
+				os.system('rm -rf %s' % (vis_file))
+	            os.system('rsync -P -rte ssh %s/* %s' % (out_file, vis_file))
+	            os.system('rm -rf %s' % (out_file))
+
 
 	## -- Final continuum image -- ##
 
