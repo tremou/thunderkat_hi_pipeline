@@ -307,8 +307,8 @@ for line in input_lines:
 					'out':out_file}
 				miriad.uvcat(**uvcat_input)
 				os.system('rm -rf %s' % (vis_file))
-	            os.system('rsync -P -rte ssh %s/* %s' % (out_file, vis_file))
-	            os.system('rm -rf %s' % (out_file))
+				os.system('rsync -P -rte ssh %s/* %s' % (out_file, vis_file))
+				os.system('rm -rf %s' % (out_file))
 
 
 	## -- Final continuum image -- ##
