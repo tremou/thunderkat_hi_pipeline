@@ -314,7 +314,7 @@ for line in input_lines:
 	## -- Final continuum image -- ##
 
 	# image
-	vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal%d' % (selfcal_ind+1)
+	vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal' 
 	map_file = in_path+'/'+obsid+'/'+target+'.mfs.imap.cal%d' % (selfcal_ind+1)
 	beam_file = in_path+'/'+obsid+'/'+target+'.mfs.ibeam.cal%d' % (selfcal_ind+1)
 	if not os.path.exists(map_file):
@@ -387,7 +387,7 @@ for line in input_lines:
                                 np.abs(source_coord.dec.dms[2]))
 
 		# phase rotate calibrated visibilities to source position
-		vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal%d' % (selfcal_ind+1)
+		vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal'
 		out_file = in_path+'/'+obsid+'/'+source_name+'.uv'
 		if not os.path.exists(out_file):
 			uvedit_ra = '%02d,%02d,%f' % (int(np.abs(source_coord.ra.hms[0])),
