@@ -32,6 +32,9 @@ in_path = './' # os.getcwd()
 HI_FREQ = 1420.40575177 # MHz
 LIGHT_SPEED = 2.99792458e5 # km/s
 
+# Define whether fixed velocity bins
+fixed_vel_bins = True
+
 # Define method to find peak continuum in a small region
 def find_peak(source_coord, image_name, box_size=11):
 
@@ -504,11 +507,13 @@ for line in input_lines:
 					'options':'double',
 					'mode':'fft',
 					'slop':'1,zero'}
+			if fixed_vel_bins:
+					invert_input['line'] = 'velocity,75,-200,5.6'
 			miriad.invert(**invert_input)
 
 		# Calculate image noise
 		sigest_input = {'In':map_file,
-		        'region':'box(0,0,128,128)'}
+		        'region':'box(0,0,64,64)'}
 		sigest_output = miriad.sigest(**sigest_input)
 		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
