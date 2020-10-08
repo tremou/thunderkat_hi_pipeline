@@ -37,19 +37,19 @@ export PATH=$PATH:$PIPELINE
 input_file=$1
 
 # Copy data to local directory
-casa -c $PIPELINE/split.py $input_file --nologger --log2term --nogui
+# casa -c $PIPELINE/split.py $input_file --nologger --log2term --nogui
 
 # Add missing rest frequency field in MS table
-python2.7 $PIPELINE/add_restfreq.py $input_file
+# python2.7 $PIPELINE/add_restfreq.py $input_file
 
 # Unflag data
-casa -c $PIPELINE/unflag.py $input_file --nologger --log2term --nogui
+# casa -c $PIPELINE/unflag.py $input_file --nologger --log2term --nogui
 
 # Convert into UVFITS
-casa -c $PIPELINE/fits.py $input_file --nologger --log2term --nogui
+# casa -c $PIPELINE/fits.py $input_file --nologger --log2term --nogui
 
 # Run calibration and imaging
 python2.7 $PIPELINE/cal_image.py --input_file $input_file
 
 # Stack target and reference spectra
-python2.7 $PIPELINE/stack_spectra.py --input_file $input_file
+# python2.7 $PIPELINE/stack_spectra.py --input_file $input_file
