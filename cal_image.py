@@ -125,13 +125,6 @@ for line in input_lines:
 			'flagval':'flag'}
 		miriad.uvflag(**uvflag_input)
 
-		# Flag short baselines for HI emission
-		# in_file = in_path+'/'+obsid+'/'+name+'.uv'
-		# uvflag_input = {'vis':in_file,
-		#	'select':'uvrange(0,10)',
-		#	'flagval':'flag'}
-		# miriad.uvflag(**uvflag_input)
-
 		# Additional flags
 		if os.path.exists(in_path+'/'+obsid+'/uvflag.txt'):
 			flags = ascii.read(in_path+'/'+obsid+'/uvflag.txt', format='commented_header', comment='#')
@@ -513,7 +506,7 @@ for line in input_lines:
 			if fixed_vel_bins:
 					invert_input['line'] = 'velocity,75,-200,5.6'
 			if hi_filter:
-					invert_input['select'] = '-uvrange(0,1000)'
+					invert_input['select'] = '-uvrange(0,1)'
 			miriad.invert(**invert_input)
 
 		# Calculate image noise
