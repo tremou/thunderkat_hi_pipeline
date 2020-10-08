@@ -36,7 +36,7 @@ LIGHT_SPEED = 2.99792458e5 # km/s
 fixed_vel_bins = True
 
 # Define whether HI emission filter
-hi_filter = True
+hi_filter = False
 
 # Define method to find peak continuum in a small region
 def find_peak(source_coord, image_name, box_size=11):
@@ -414,7 +414,7 @@ for line in input_lines:
 					'beam':beam_file,
 					'imsize':'4096,4096',
 					'cell':'4,4,res',
-					'robust':'-2',
+					'robust':'2',
 					'stokes':'ii',
 					'options':'double,mfs',
 					'mode':'fft',
@@ -498,7 +498,7 @@ for line in input_lines:
 					'beam':beam_file,
 					'imsize':'256,256',
 					'cell':'4,4,res',
-					'robust':'-2',
+					'robust':'2',
 					'stokes':'ii',
 					'options':'double',
 					'mode':'fft',
