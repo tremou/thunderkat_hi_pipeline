@@ -105,6 +105,8 @@ for line in input_lines:
 	# Define reference antenna
 	refant = int(line['refant'])
 
+	'''
+
 	## -- Common data preparation -- ##
 	for name in names:
 
@@ -356,6 +358,8 @@ for line in input_lines:
 				'map':map_file,
 				'out':out_file}
 		miriad.restor(**restor_input)
+
+	'''
 
 	## -- Loop over source list  --- ##
 
