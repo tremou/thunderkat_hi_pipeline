@@ -263,7 +263,7 @@ for line in input_lines:
 
 		# Calculate image noise
 		sigest_input = {'In':map_file,
-			'region':'box(0,0,1024,1024)'}
+			'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
 		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
@@ -333,7 +333,7 @@ for line in input_lines:
 
 	# Calculate image noise
 	sigest_input = {'In':map_file,
-		'region':'box(0,0,1024,1024)'}
+		'region':'box(0,0,128,128)'}
 	sigest_output = miriad.sigest(**sigest_input)
 	image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
@@ -427,7 +427,7 @@ for line in input_lines:
 
 		# Calculate image noise
 		sigest_input = {'In':map_file,
-			'region':'box(0,0,1024,1024)'}
+			'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
 		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
@@ -515,7 +515,7 @@ for line in input_lines:
 
 		# Calculate image noise
 		sigest_input = {'In':map_file,
-		        'region':'box(0,0,1024,1024)'}
+		        'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
 		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
@@ -591,7 +591,7 @@ for line in input_lines:
 		in_file = in_path+'/'+obsid+'/'+source_name+'.cube.icln'
 		imstat_log = in_path+'/'+obsid+'/'+source_name+'.cube.imstat.log'
 		imstat_input = {'In':in_file,
-				'region':'box(0,0,64,64)',
+				'region':'box(0,0,128,128)',
 				'plot':'rrms',
 				'options':'guaranteespaces',
 				'log':imstat_log}
