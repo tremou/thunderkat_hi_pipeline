@@ -36,7 +36,7 @@ LIGHT_SPEED = 2.99792458e5 # km/s
 fixed_vel_bins = True
 
 # Define whether HI emission filter
-hi_filter = False
+hi_filter = True
 
 # Define method to find peak continuum in a small region
 def find_peak(source_coord, image_name, box_size=11):
@@ -261,7 +261,7 @@ for line in input_lines:
 
 		# Calculate image noise
 		sigest_input = {'In':map_file,
-			'region':'box(0,0,1024,1024)'}
+			'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
 		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
@@ -331,7 +331,7 @@ for line in input_lines:
 
 	# Calculate image noise
 	sigest_input = {'In':map_file,
-		'region':'box(0,0,1024,1024)'}
+		'region':'box(0,0,128,128)'}
 	sigest_output = miriad.sigest(**sigest_input)
 	image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
@@ -423,7 +423,7 @@ for line in input_lines:
 
 		# Calculate image noise
 		sigest_input = {'In':map_file,
-			'region':'box(0,0,1024,1024)'}
+			'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
 		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
@@ -496,7 +496,7 @@ for line in input_lines:
 			invert_input = {'vis':vis_file,
 					'map':map_file,
 					'beam':beam_file,
-					'imsize':'256,256',
+					'imsize':'2048,2048',
 					'cell':'4,4,res',
 					'robust':'2',
 					'stokes':'ii',
@@ -511,7 +511,7 @@ for line in input_lines:
 
 		# Calculate image noise
 		sigest_input = {'In':map_file,
-		        'region':'box(0,0,64,64)'}
+		        'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
 		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
@@ -587,7 +587,7 @@ for line in input_lines:
 		in_file = in_path+'/'+obsid+'/'+source_name+'.cube.icln'
 		imstat_log = in_path+'/'+obsid+'/'+source_name+'.cube.imstat.log'
 		imstat_input = {'In':in_file,
-				'region':'box(0,0,64,64)',
+				'region':'box(0,0,128,128)',
 				'plot':'rrms',
 				'options':'guaranteespaces',
 				'log':imstat_log}
