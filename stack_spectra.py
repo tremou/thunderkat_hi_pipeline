@@ -88,14 +88,14 @@ if len(reference_spectrum) == 0:
 
 # Construct velocity bins
 dvel = np.abs(np.median(np.diff(target_spectrum['radio_vel[km/s]'])))
-bin_edges = np.arange(np.min(target_spectrum['radio_vel[km/s]'])-dvel*0.5, np.max(target_spectrum['radio_vel[km/s]'])+0.5*dvel, dvel)
+bin_edges = np.arange(np.min(target_spectrum['radio_vel[km/s]'])-dvel*0.5, np.max(target_spectrum['radio_vel[km/s]'])-0.5*dvel, dvel)
 
 
 null_array = np.nan*np.zeros(len(bin_edges))
 target_spectrum_binned = Table([null_array,null_array,null_array],names=('radio_vel[km/s]','abs','abs_noise'))
 reference_spectrum_binned = Table([null_array,null_array,null_array],names=('radio_vel[km/s]','abs','abs_noise'))
 ind = 0
-for bin_edge in bin_edges-1:
+for bin_edge in bin_edges:
 
 	# Target spectrum
 
