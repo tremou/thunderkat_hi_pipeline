@@ -52,4 +52,4 @@ input_file=$1
 python2.7 $PIPELINE/cal_image.py --input_file $input_file
 
 # Stack target and reference spectra
-# python2.7 $PIPELINE/stack_spectra.py --input_file $input_file
+python2.7 $PIPELINE/stack_spectra.py --input_file $input_file

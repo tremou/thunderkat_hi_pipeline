@@ -33,10 +33,10 @@ HI_FREQ = 1420.40575177 # MHz
 LIGHT_SPEED = 2.99792458e5 # km/s
 
 # Define whether fixed velocity bins
-fixed_vel_bins = False
+fixed_vel_bins = True
 
 # Define whether HI emission filter
-hi_filter = False
+hi_filter = True
 
 # Define method to find peak continuum in a small region
 def find_peak(source_coord, image_name, box_size=11):
@@ -252,7 +252,7 @@ for line in input_lines:
 			invert_input = {'vis':vis_file,
 				'map':map_file,
 				'beam':beam_file,
-				'imsize':'4096,4096',
+				'imsize':'2,2,beam',
 				'cell':'4,4,res',
 				'robust':'-0.5',
 				'stokes':'ii',
@@ -322,7 +322,7 @@ for line in input_lines:
 		invert_input = {'vis':vis_file,
 					'map':map_file,
 					'beam':beam_file,
-					'imsize':'4096,4096',
+					'imsize':'2,2,beam',
 					'cell':'4,4,res',
 					'robust':'-0.5',
 					'stokes':'ii',
@@ -416,7 +416,7 @@ for line in input_lines:
 			invert_input = {'vis':vis_file,
 					'map':map_file,
 					'beam':beam_file,
-					'imsize':'4096,4096',
+					'imsize':'2,2,beam',
 					'cell':'4,4,res',
 					'robust':'2',
 					'stokes':'ii',
@@ -500,7 +500,7 @@ for line in input_lines:
 			invert_input = {'vis':vis_file,
 					'map':map_file,
 					'beam':beam_file,
-					'imsize':'256,256',
+					'imsize':'1,1,beam',
 					'cell':'4,4,res',
 					'robust':'2',
 					'stokes':'ii',
@@ -515,7 +515,7 @@ for line in input_lines:
 
 		# Calculate image noise
 		sigest_input = {'In':map_file,
-		        'region':'box(0,0,64,64)'}
+		        'region':'box(0,0,1024,1024)'}
 		sigest_output = miriad.sigest(**sigest_input)
 		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
