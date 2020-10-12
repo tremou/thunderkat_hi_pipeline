@@ -88,7 +88,7 @@ if len(reference_spectrum) == 0:
 
 # Construct velocity bins
 dvel = np.abs(np.median(np.diff(target_spectrum['radio_vel[km/s]'])))
-bin_edges = np.arange(np.min(target_spectrum['radio_vel[km/s]'])-dvel*0.5, np.max(target_spectrum['radio_vel[km/s]'])+0.5*dvel, dvel)
+bin_edges = np.arange(np.min(target_spectrum['radio_vel[km/s]'])-0.5*dvel, np.max(target_spectrum['radio_vel[km/s]'])-0.5*dvel, dvel)
 
 # Calculate weighted mean spectra
 null_array = np.nan*np.zeros(len(bin_edges))
