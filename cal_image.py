@@ -489,7 +489,7 @@ for line in input_lines:
 		if not os.path.exists(out_file):
 			uvlin_input = {'vis':vis_file,
 					'out':out_file,
-					'order':5,
+					'order':2,
 					'mode':'line',
 					'options':'nowindow'}
 			if fixed_vel_bins:
@@ -533,7 +533,7 @@ for line in input_lines:
 					'beam':beam_file,
 					'out':out_file,
 					'gain':'0.01',
-					'cutoff':'%f'%(3.*image_noise),
+					'cutoff':'%f'%(5.*image_noise),
 					'niters':'1e6',
 					'speed':'0'}
 			miriad.clean(**clean_input)
