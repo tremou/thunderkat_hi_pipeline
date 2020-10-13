@@ -474,8 +474,6 @@ for line in input_lines:
 					'model':model_file,
 					'options':'subtract,mfs',
 					'out':out_file}
-			if hi_filter:
-					uvmodel_input['select'] = '-uvrange(0,5)'
 			miriad.uvmodel(**uvmodel_input)
 
 		# uvlin
@@ -488,8 +486,6 @@ for line in input_lines:
 					'order':5,
 					'mode':'line',
 					'options':'nowindow'}
-			if hi_filter:
-					uvlin_input['select'] = '-uvrange(0,5)'
 			miriad.uvlin(**uvlin_input)
 
 
