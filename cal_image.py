@@ -418,7 +418,7 @@ for line in input_lines:
 					'beam':beam_file,
 					'imsize':'4096,4096',
 					'cell':'4,4,res',
-					'robust':'2',
+					'robust':'0.5',
 					'stokes':'ii',
 					'options':'double,mfs',
 					'mode':'fft',
@@ -478,7 +478,10 @@ for line in input_lines:
 					'model':model_file,
 					'options':'subtract,mfs',
 					'out':out_file}
+			if fixed_vel_bins:
+					uvmodel_input['line'] = 'velocity,75,-200,5.6'
 			miriad.uvmodel(**uvmodel_input)
+
 
 		# uvlin
 		vis_file = in_path+'/'+obsid+'/'+source_name+'.uv.uvmodel'
@@ -490,6 +493,8 @@ for line in input_lines:
 					'order':5,
 					'mode':'line',
 					'options':'nowindow'}
+			if fixed_vel_bins:
+					uvlin_input['line'] = 'velocity,75,-200,5.6'
 			miriad.uvlin(**uvlin_input)
 
 		# invert
@@ -502,7 +507,7 @@ for line in input_lines:
 					'beam':beam_file,
 					'imsize':'2048,2048',
 					'cell':'4,4,res',
-					'robust':'2',
+					'robust':'0.5',
 					'stokes':'ii',
 					'options':'double',
 					'mode':'fft',
@@ -510,7 +515,7 @@ for line in input_lines:
 			if fixed_vel_bins:
 					invert_input['line'] = 'velocity,75,-200,5.6'
 			if hi_filter:
-					invert_input['select'] = '-uvrange(0,1)'
+					invert_input['select'] = '-uvrange(0,5)'
 			miriad.invert(**invert_input)
 
 		# Calculate image noise
