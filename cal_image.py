@@ -474,7 +474,10 @@ for line in input_lines:
 					'model':model_file,
 					'options':'subtract,mfs',
 					'out':out_file}
+			if fixed_vel_bins:
+					uvmodel_input['line'] = 'velocity,75,-200,5.6'
 			miriad.uvmodel(**uvmodel_input)
+
 
 		# uvlin
 		vis_file = in_path+'/'+obsid+'/'+source_name+'.uv.uvmodel'
@@ -482,12 +485,15 @@ for line in input_lines:
 		if not os.path.exists(out_file):
 			uvlin_input = {'vis':vis_file,
 					'out':out_file,
-					'chans':'0,%d,%d,1e9' % (hi_chans[0],hi_chans[1]),
-					'order':5,
+					'order':2,
 					'mode':'line',
 					'options':'nowindow'}
+			if fixed_vel_bins:
+					uvlin_input['line'] = 'velocity,75,-200,5.6'
+					uvlin_input['chans'] = '0,18,54,1e9'
+			else:
+					uvlin_input['chans'] = '0,%d,%d,1e9' % (hi_chans[0],hi_chans[1]),
 			miriad.uvlin(**uvlin_input)
-
 
 		# invert
 		vis_file = in_path+'/'+obsid+'/'+source_name+'.uv.uvlin'
