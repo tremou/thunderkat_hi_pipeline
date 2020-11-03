@@ -30,7 +30,7 @@ export PGPLOT_RGB=$MIRLIB/rgb.txt
 export MIRPY_DIR='/lemonpi/jallison/software/mirpy-0.2.0/'
 
 # Add this directory to path
-export PIPELINE='/lemonpi/jallison/thunderkat_hi_pipeline/'
+export PIPELINE='/lemonpi/tomek/thunderkat_hi_pipeline/'
 export PATH=$PATH:$PIPELINE
 
 # Set input file
