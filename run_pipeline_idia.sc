@@ -24,10 +24,10 @@ export PGPLOT_FONT=$MIRLIB/grfont.dat
 export PGPLOT_RGB=$MIRLIB/rgb.txt
 
 # Set path to mirpy
-export MIRPY_DIR='/lemonpi/jallison/software/mirpy-0.2.0/'
+export MIRPY_DIR='/scratch/users/jallison/software/mirpy-0.2.0/'
 
 # Add this directory to path
-export PIPELINE='/scratch/users/jallison/THUNDERKAT/thunderkat_hi_pipeline/'
+export PIPELINE='/scratch/users/jallison/thunderkat/thunderkat_hi_pipeline/'
 export PATH=$PATH:$PIPELINE
 
 # Set input file
