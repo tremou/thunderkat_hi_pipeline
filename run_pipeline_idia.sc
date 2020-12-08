@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 # Set MIRIAD environment
-export MIR=/home/soft/miriad/
+export MIR=/scratch/users/jallison/software/miriad/
 export MIRARCH=linux64
 export MIRARCHD=$MIR/$MIRARCH
 export MIRBIN=$MIRARCHD/bin
