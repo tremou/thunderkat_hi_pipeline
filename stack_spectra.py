@@ -88,9 +88,9 @@ if len(reference_spectrum) == 0:
 
 # Construct velocity bins
 dvel = np.abs(np.median(np.diff(target_spectrum['radio_vel[km/s]'])))
-bin_edges = np.arange(np.min(target_spectrum['radio_vel[km/s]'])-dvel*0.5, np.max(target_spectrum['radio_vel[km/s]'])-0.5*dvel, dvel)
+bin_edges = np.arange(np.min(target_spectrum['radio_vel[km/s]'])-0.5*dvel, np.max(target_spectrum['radio_vel[km/s]'])-0.5*dvel, dvel)
 
-
+# Calculate weighted mean spectra
 null_array = np.nan*np.zeros(len(bin_edges))
 target_spectrum_binned = Table([null_array,null_array,null_array],names=('radio_vel[km/s]','abs','abs_noise'))
 reference_spectrum_binned = Table([null_array,null_array,null_array],names=('radio_vel[km/s]','abs','abs_noise'))
@@ -159,23 +159,22 @@ ax1 = plt.subplot(gs[0])
 # Set limits
 x_min = options.vel_min
 x_max = options.vel_max
-y_min = 1.5*100.*np.nanmin(reference_spectrum_binned['abs'])
-y_max = 1.5*100.*np.nanmax(reference_spectrum_binned['abs'])
-# y_max = 3.*100.*np.nanmax(target_spectrum_binned['abs'])
-# offset = 3.*100.*(np.nanmin(target_spectrum_binned['abs'])-np.nanmax(reference_spectrum_binned['abs']))
-offset = 0.
-y_min += offset
+y_min = 3.*np.nanmin(-100.*reference_spectrum_binned['abs'])
+y_max = 1.5*np.nanmax(-100.*target_spectrum_binned['abs'])
+offset = y_max + np.nanmax(-100.*reference_spectrum_binned['abs'])
+# offset = 0.
+y_max += offset
 ax1.set_xlim(x_min, x_max)
 ax1.set_ylim(y_min, y_max)
 
 # Do plotting
-h1 = ax1.step(target_spectrum_binned['radio_vel[km/s]'], 100.*target_spectrum_binned['abs'], where='mid', linestyle='-',
+h1 = ax1.step(target_spectrum_binned['radio_vel[km/s]'], -100.*target_spectrum_binned['abs'], where='mid', linestyle='-',
 				color='r',linewidth=2., zorder=2, label=r'%s'%target_name)
 ax1.fill_between(target_spectrum_binned['radio_vel[km/s]'], 0.0, 3.*100.*target_spectrum_binned['abs_noise'],
 				facecolor='r', edgecolor='none', zorder=0, alpha=0.25)
 ax1.fill_between(target_spectrum_binned['radio_vel[km/s]'], 0.0, -3.*100.*target_spectrum_binned['abs_noise'],
 				facecolor='r', edgecolor='none', zorder=0, alpha=0.25)
-h2 = ax1.step(reference_spectrum_binned['radio_vel[km/s]'], 100.*reference_spectrum_binned['abs']+offset, where='mid', linestyle='-',
+h2 = ax1.step(reference_spectrum_binned['radio_vel[km/s]'], -100.*reference_spectrum_binned['abs']+offset, where='mid', linestyle='-',
  				color='b',linewidth=2., zorder=2, label=r'Reference')
 ax1.fill_between(reference_spectrum_binned['radio_vel[km/s]'], offset, 3.*100.*reference_spectrum_binned['abs_noise']+offset,
 				facecolor='b', edgecolor='none', zorder=0, alpha=0.25)
@@ -186,8 +185,8 @@ ax1.axhline(offset, color='k', linestyle=':', linewidth=1.0, zorder=1)
 ax1.axvline(0., color='k', linestyle=':', linewidth=1.0, zorder=1)
 
 # Set labels
-ax1.set_xlabel(r"LSR velocity [km/s]", fontsize = 20)
-ax1.set_ylabel(r"Fractional absorption [per cent]", fontsize = 20)
+ax1.set_xlabel(r"$v_\mathrm{LSR}$ [km/s]", fontsize = 20)
+ax1.set_ylabel(r"HI absorption [per cent]", fontsize = 20)
 
 # Add legend
 hs = h1+h2
@@ -202,6 +201,9 @@ ax1.tick_params(bottom=True, left=True, top=True, right=True,
 				length=10, width=1, which='major', direction='in')
 ax1.tick_params(bottom=True, left=True, top=True, right=True,
 				length=5, width=1, which='minor', direction='in')
+
+# Invert y axis
+ax1.invert_yaxis()
 
 # Write spectrum to PDF file
 plt.savefig('./spectrum_binned.pdf')
