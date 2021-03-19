@@ -462,6 +462,14 @@ for line in input_lines:
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln.fits'
 		peak_flux, peak_coord = find_peak(source_coord,in_file,box_size=11)
 
+   		# Make continuum mask for cleaning HI absorption
+   		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln'
+    	mask_name = in_path+'/'+obsid+'/'+source_name+'.mfs.mask'
+    	cutoff = 3.*image_noise
+    	miriad.maths(exp='<%s>' % (in_file),
+        	         mask='<%s>.gt.(%.8f)' % (in_file, cutoff),
+	                 region='perc(100)',
+    	             out='%s' % (mask_name))
 
 		## -- Continuum Subtraction -- ##
 
