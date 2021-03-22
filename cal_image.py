@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.7
 
+
 ## -- Initialize -- ##
 
 # Import modules
@@ -272,6 +273,7 @@ for line in input_lines:
 				'beam':beam_file,
 				'out':out_file,
 				'gain':'0.01',
+				'options':'negstop',
 				'cutoff':'%f'%(3*image_noise),
 				'niters':'1e6',
 				'speed':'0'}
@@ -342,6 +344,7 @@ for line in input_lines:
 				'beam':beam_file,
 				'out':out_file,
 				'gain':'0.01',
+				'options':'negstop',
 				'cutoff':'%f'%(3.*image_noise),
 				'niters':'1e6',
 				'speed':'0'}
@@ -434,6 +437,7 @@ for line in input_lines:
 					'beam':beam_file,
 					'out':out_file,
 					'gain':'0.01',
+					'options':'negstop',
 					'cutoff':'%f'%(3.*image_noise),
 					'niters':'1e6',
 					'speed':'0'}
@@ -449,6 +453,23 @@ for line in input_lines:
 					'out':out_file}
 			miriad.restor(**restor_input)
 
+		# Calculate image noise
+		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln'
+		sigest_input = {'In':in_file,
+			'region':'box(0,0,128,128)'}
+		sigest_output = miriad.sigest(**sigest_input)
+		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
+
+		# Make continuum mask for cleaning HI absorption
+		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln'
+		out_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask'
+		if not os.path.exists(out_file):
+			maths_input = {'exp':'<%s>'%(in_file),
+						'mask':'<%s>.gt.(%.8f)'%(in_file, 5.*image_noise),
+						'region':'perc(100)',
+						'out':out_file}
+			miriad.maths(**maths_input)
+
 		# convert to fits
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln'
 		out_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln.fits'
@@ -462,14 +483,6 @@ for line in input_lines:
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln.fits'
 		peak_flux, peak_coord = find_peak(source_coord,in_file,box_size=11)
 
-		# Make continuum mask for cleaning HI absorption
-		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln'
-		mask_name = in_path+'/'+obsid+'/'+source_name+'.mfs.mask'
-		cutoff = 3.*image_noise
-		miriad.maths(exp='<%s>' % (in_file),
-					mask='<%s>.gt.(%.8f)' % (in_file, cutoff),
-					region='perc(100)',
-					out='%s' % (mask_name))
 
 		## -- Continuum Subtraction -- ##
 
@@ -503,6 +516,9 @@ for line in input_lines:
 					uvlin_input['chans'] = '0,%d,%d,1e9' % (hi_chans[0],hi_chans[1]),
 			miriad.uvlin(**uvlin_input)
 
+
+		## -- Spectral-line Imaging of source  --- ##		
+
 		# invert
 		vis_file = in_path+'/'+obsid+'/'+source_name+'.uv.uvlin'
 		map_file = in_path+'/'+obsid+'/'+source_name+'.cube.imap'
@@ -524,7 +540,18 @@ for line in input_lines:
 					invert_input['select'] = '-uvrange(0,5)'
 			miriad.invert(**invert_input)
 
-		# Calculate image noise
+		# regrid continuum mask to dimensions of cube
+		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask'
+		tin_file = in_path+'/'+obsid+'/'+source_name+'.cube.imap'
+		out_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask.regrid'
+		if not os.path.exists(out_file):
+			regrid_input = {'in':in_file,
+							'out':out_file,
+							'axes':'1,2,3',
+							'tin':tin_file}
+			miriad.regrid(**regrid_input)
+
+		# calculate image noise
 		sigest_input = {'In':map_file,
 		        'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
@@ -532,6 +559,7 @@ for line in input_lines:
 
 		# clean
 		out_file = in_path+'/'+obsid+'/'+source_name+'.cube.icmp'
+		mask_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask.regrid'
 		if not os.path.exists(out_file):
 			clean_input = {'map':map_file,
 					'beam':beam_file,
@@ -539,6 +567,7 @@ for line in input_lines:
 					'gain':'0.01',
 					'cutoff':'%f'%(5.*image_noise),
 					'niters':'1e6',
+					'region':'mask(%s)'%(mask_file),
 					'speed':'0'}
 			miriad.clean(**clean_input)
 
@@ -551,7 +580,6 @@ for line in input_lines:
 					'map':map_file,
 					'out':out_file}
 			miriad.restor(**restor_input)
-
 
 		## -- Extract spectra -- ##
 

@@ -19,8 +19,8 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib import rc
 import matplotlib.gridspec as gridspec
-# rc('text', usetex=True)
-# rc('font',**{'family':'serif','serif':['serif'],'size':20})
+rc('text', usetex=True)
+rc('font',**{'family':'serif','serif':['serif'],'size':20})
 matplotlib.rcParams['xtick.direction'] = 'in'
 matplotlib.rcParams['ytick.direction'] = 'in'
 
@@ -159,7 +159,7 @@ ax1 = plt.subplot(gs[0])
 # Set limits
 x_min = options.vel_min
 x_max = options.vel_max
-y_min = 3.*np.nanmin(-100.*reference_spectrum_binned['abs'])
+y_min = 5.*np.nanmin(-100.*reference_spectrum_binned['abs'])
 y_max = 1.5*np.nanmax(-100.*target_spectrum_binned['abs'])
 offset = y_max + np.nanmax(-100.*reference_spectrum_binned['abs'])
 # offset = 0.
@@ -169,7 +169,7 @@ ax1.set_ylim(y_min, y_max)
 
 # Do plotting
 h1 = ax1.step(target_spectrum_binned['radio_vel[km/s]'], -100.*target_spectrum_binned['abs'], where='mid', linestyle='-',
-				color='r',linewidth=2., zorder=2, label=r'%s'%target_name)
+				color='r',linewidth=2., zorder=2, label=r'V3890\,Sgr')  # r'%s'%target_name)
 ax1.fill_between(target_spectrum_binned['radio_vel[km/s]'], 0.0, 3.*100.*target_spectrum_binned['abs_noise'],
 				facecolor='r', edgecolor='none', zorder=0, alpha=0.25)
 ax1.fill_between(target_spectrum_binned['radio_vel[km/s]'], 0.0, -3.*100.*target_spectrum_binned['abs_noise'],
@@ -185,8 +185,8 @@ ax1.axhline(offset, color='k', linestyle=':', linewidth=1.0, zorder=1)
 ax1.axvline(0., color='k', linestyle=':', linewidth=1.0, zorder=1)
 
 # Set labels
-ax1.set_xlabel(r"$v_\mathrm{LSR}$ [km/s]", fontsize = 20)
-ax1.set_ylabel(r"HI absorption [per cent]", fontsize = 20)
+ax1.set_xlabel(r"$v_\mathrm{LSR}$ [km\,s$^{-1}$]", fontsize = 20)
+ax1.set_ylabel(r"HI absorption [per\,cent]", fontsize = 20)
 
 # Add legend
 hs = h1+h2
