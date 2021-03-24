@@ -453,23 +453,6 @@ for line in input_lines:
 					'out':out_file}
 			miriad.restor(**restor_input)
 
-		# Calculate image noise
-		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln'
-		sigest_input = {'In':in_file,
-			'region':'box(0,0,128,128)'}
-		sigest_output = miriad.sigest(**sigest_input)
-		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
-
-		# Make continuum mask for cleaning HI absorption
-		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln'
-		out_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask'
-		if not os.path.exists(out_file):
-			maths_input = {'exp':'<%s>'%(in_file),
-						'mask':'<%s>.gt.(%.8f)'%(in_file, 5.*image_noise),
-						'region':'perc(100)',
-						'out':out_file}
-			miriad.maths(**maths_input)
-
 		# convert to fits
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln'
 		out_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln.fits'
@@ -540,6 +523,22 @@ for line in input_lines:
 					invert_input['select'] = '-uvrange(0,5)'
 			miriad.invert(**invert_input)
 
+		# calculate image noise
+		sigest_input = {'In':map_file,
+		        'region':'box(0,0,128,128)'}
+		sigest_output = miriad.sigest(**sigest_input)
+		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
+
+		# Make continuum mask for cleaning HI absorption
+		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln'
+		out_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask'
+		if not os.path.exists(out_file):
+			maths_input = {'exp':'<%s>'%(in_file),
+						'mask':'<%s>.gt.(%.8f)'%(in_file, 10.*image_noise),
+						'region':'perc(100)',
+						'out':out_file}
+			miriad.maths(**maths_input)
+
 		# alter third axis of mask to span the observed bandwidth
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask'
 		puthd_input = {'in':'%s/cdelt3'%(in_path),
@@ -555,12 +554,6 @@ for line in input_lines:
 							'out':out_file,
 							'tin':tin_file}
 			miriad.regrid(**regrid_input)
-
-		# calculate image noise
-		sigest_input = {'In':map_file,
-		        'region':'box(0,0,128,128)'}
-		sigest_output = miriad.sigest(**sigest_input)
-		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
 		# clean
 		out_file = in_path+'/'+obsid+'/'+source_name+'.cube.icmp'
