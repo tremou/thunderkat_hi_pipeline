@@ -544,6 +544,12 @@ for line in input_lines:
 					invert_input['select'] = '-uvrange(0,5)'
 			miriad.invert(**invert_input)
 
+		# alter third axis of mask to span the observed bandwidth
+		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask'
+		puthd_input = {'in':'%s/cdelt3'%(in_path),
+					'value':'999'}
+		miriad.puthd(**puthd_input)
+
 		# regrid continuum mask to dimensions of cube
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask'
 		tin_file = in_path+'/'+obsid+'/'+source_name+'.cube.imap'
@@ -551,7 +557,6 @@ for line in input_lines:
 		if not os.path.exists(out_file):
 			regrid_input = {'in':in_file,
 							'out':out_file,
-							'axes':'1,2,3',
 							'tin':tin_file}
 			miriad.regrid(**regrid_input)
 
