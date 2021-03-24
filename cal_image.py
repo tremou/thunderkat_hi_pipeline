@@ -540,7 +540,7 @@ for line in input_lines:
 
 		# alter third axis of mask to span the observed bandwidth
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask'
-		puthd_input = {'in':'%s/cdelt3'%(in_path),
+		puthd_input = {'in':'%s/cdelt3'%(in_file),
 					'value':'999'}
 		miriad.puthd(**puthd_input)
 
