@@ -230,9 +230,12 @@ for line in input_lines:
 	miriad.gpcopy(**gpcopy_input)
 
 	# Apply solutions
-	uvcat_input = {'vis':in_path+'/'+obsid+'/'+target+'.uv',
-			'out':in_path+'/'+obsid+'/'+target+'.uv.cal'}
-	miriad.uvcat(**uvcat_input)
+	in_file = in_path+'/'+obsid+'/'+target+'.uv'
+	out_file = in_path+'/'+obsid+'/'+target+'.uv.cal'
+	if not os.path.exists(out_file):
+		uvcat_input = {'vis':infile,
+				'out':out_file}
+		miriad.uvcat(**uvcat_input)
 
 
 	## -- Selfcal loop -- ##
