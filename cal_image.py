@@ -551,11 +551,18 @@ for line in input_lines:
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask'
 		tin_file = in_path+'/'+obsid+'/'+source_name+'.cube.imap'
 		out_file = in_path+'/'+obsid+'/'+source_name+'.mfs.mask.regrid'
+		mask_success = False
 		if not os.path.exists(out_file):
 			regrid_input = {'in':in_file,
 							'out':out_file,
 							'tin':tin_file}
-			miriad.regrid(**regrid_input)
+			try:
+				miriad.regrid(**regrid_input)
+				mask_success = True
+			except:
+				# Masking hasn't worked, likely continuum lower than cube noise threshold
+				mask_success = False
+
 
 		# clean
 		out_file = in_path+'/'+obsid+'/'+source_name+'.cube.icmp'
@@ -567,8 +574,9 @@ for line in input_lines:
 					'gain':'0.01',
 					'cutoff':'%f'%(5.*image_noise),
 					'niters':'1e6',
-					'region':'mask(%s)'%(mask_file),
 					'speed':'0'}
+			if mask_success:
+				clean_input['region'] = 'mask(%s)'%(mask_file)
 			miriad.clean(**clean_input)
 
 		# restor
