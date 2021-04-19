@@ -233,7 +233,7 @@ for line in input_lines:
 	in_file = in_path+'/'+obsid+'/'+target+'.uv'
 	out_file = in_path+'/'+obsid+'/'+target+'.uv.cal'
 	if not os.path.exists(out_file):
-		uvcat_input = {'vis':infile,
+		uvcat_input = {'vis':in_file,
 				'out':out_file}
 		miriad.uvcat(**uvcat_input)
 
