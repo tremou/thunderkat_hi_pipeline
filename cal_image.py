@@ -320,8 +320,8 @@ for line in input_lines:
 
 	# image
 	vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal' 
-	map_file = in_path+'/'+obsid+'/'+target+'.mfs.imap.cal%d' % (selfcal_ind+1)
-	beam_file = in_path+'/'+obsid+'/'+target+'.mfs.ibeam.cal%d' % (selfcal_ind+1)
+	map_file = in_path+'/'+obsid+'/'+target+'.mfs.imap.cal%d' % (len(selfcal_intervals))
+	beam_file = in_path+'/'+obsid+'/'+target+'.mfs.ibeam.cal%d' % (len(selfcal_intervals))
 	if not os.path.exists(map_file):
 		invert_input = {'vis':vis_file,
 					'map':map_file,
@@ -335,14 +335,14 @@ for line in input_lines:
 					'slop':'1,interpolate'}
 		miriad.invert(**invert_input)
 
-	# calculate image noise
+	# Calculate image noise
 	sigest_input = {'In':map_file,
 		'region':'box(0,0,128,128)'}
 	sigest_output = miriad.sigest(**sigest_input)
 	image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
 	# clean
-	out_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (selfcal_ind+1)
+	out_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (len(selfcal_intervals))
 	if not os.path.exists(out_file):
 		clean_input = {'map':map_file,
 				'beam':beam_file,
@@ -355,15 +355,14 @@ for line in input_lines:
 		miriad.clean(**clean_input)
 
 	# restor
-	out_file = in_path+'/'+obsid+'/'+target+'.mfs.icln.cal%d' % (selfcal_ind+1)
-	model_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (selfcal_ind+1)
+	out_file = in_path+'/'+obsid+'/'+target+'.mfs.icln.cal%d' % (len(selfcal_intervals))
+	model_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (len(selfcal_intervals))
 	if not os.path.exists(out_file):
 		restor_input = {'model':model_file,
 				'beam':beam_file,
 				'map':map_file,
 				'out':out_file}
 		miriad.restor(**restor_input)
-
 	'''
 
 	## -- Loop over source list  --- ##
