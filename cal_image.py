@@ -341,7 +341,7 @@ for line in input_lines:
 	image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
 	# clean
-	out_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (selfcal_ind+1)
+	out_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (len(selfcal_intervals))
 	if not os.path.exists(out_file):
 		clean_input = {'map':map_file,
 				'beam':beam_file,
@@ -354,8 +354,8 @@ for line in input_lines:
 		miriad.clean(**clean_input)
 
 	# restor
-	out_file = in_path+'/'+obsid+'/'+target+'.mfs.icln.cal%d' % (selfcal_ind+1)
-	model_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (selfcal_ind+1)
+	out_file = in_path+'/'+obsid+'/'+target+'.mfs.icln.cal%d' % (len(selfcal_intervals))
+	model_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (len(selfcal_intervals))
 	if not os.path.exists(out_file):
 		restor_input = {'model':model_file,
 				'beam':beam_file,
