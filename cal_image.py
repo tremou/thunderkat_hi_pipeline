@@ -240,8 +240,8 @@ for line in input_lines:
 
 
 	## -- Selfcal loop -- ##
-	selfcal_intervals = [2,2]
-	selfcal_nfbins = [1,1]
+	selfcal_intervals = [] # [2,2]
+	selfcal_nfbins = [] # [1,1]
 	selfcal_options = ['phase','phase']
 	selfcal_ind = 0
 	for selfcal_ind in range(0,len(selfcal_intervals)):
