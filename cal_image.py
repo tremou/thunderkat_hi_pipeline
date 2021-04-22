@@ -242,7 +242,7 @@ for line in input_lines:
 	## -- Selfcal loop -- ##
 	selfcal_intervals = [] # [2,2]
 	selfcal_nfbins = [] # [1,1]
-	selfcal_options = ['phase','phase']
+	selfcal_options = [] # ['phase','phase']
 	selfcal_ind = 0
 	for selfcal_ind in range(0,len(selfcal_intervals)):
 
@@ -319,8 +319,8 @@ for line in input_lines:
 
 	# image
 	vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal' 
-	map_file = in_path+'/'+obsid+'/'+target+'.mfs.imap.cal%d' % (selfcal_ind+1)
-	beam_file = in_path+'/'+obsid+'/'+target+'.mfs.ibeam.cal%d' % (selfcal_ind+1)
+	map_file = in_path+'/'+obsid+'/'+target+'.mfs.imap.cal%d' % (len(selfcal_intervals))
+	beam_file = in_path+'/'+obsid+'/'+target+'.mfs.ibeam.cal%d' % (len(selfcal_intervals))
 	if not os.path.exists(map_file):
 		invert_input = {'vis':vis_file,
 					'map':map_file,
