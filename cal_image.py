@@ -17,8 +17,9 @@ import argparse
 
 # Set user options
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_file',type=str,help='set path to input file')
-parser.add_argument('--source_list',default='./source_list.txt',type=str,help='set path to source list')
+parser.add_argument('--box_size', type=int, help='size of box to find positon of source peak')
+parser.add_argument('--input_file', type=str, help='set path to input file')
+parser.add_argument('--source_list', default='./source_list.txt', type=str, help='set path to source list')
 options = parser.parse_args()
 
 # Define and read input file
@@ -374,6 +375,11 @@ for line in input_lines:
 	source_index = 0
 	for source in sources:
 
+		# Check that this source is in the observation
+		if 'obsid' in sources.colnames:
+			if (obsid not in source['obsid']) and ('all' not in source['obsid']):
+				continue
+
 		# Create source position object
 		source_coord = SkyCoord(ra=source['ra'],dec=source['dec'],unit=(u.hourangle, u.deg),frame='icrs')
 
@@ -466,7 +472,7 @@ for line in input_lines:
 
 		# Find position of source peak continuum
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln.fits'
-		peak_flux, peak_coord = find_peak(source_coord,in_file,box_size=11)
+		peak_flux, peak_coord = find_peak(source_coord,in_file, box_size=options.box_size)
 
 
 		## -- Continuum Subtraction -- ##
