@@ -17,8 +17,9 @@ import argparse
 
 # Set user options
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_file',type=str,help='set path to input file')
-parser.add_argument('--source_list',default='./source_list.txt',type=str,help='set path to source list')
+parser.add_argument('--box_size', type=int, help='size of box to find positon of source peak')
+parser.add_argument('--input_file', type=str, help='set path to input file')
+parser.add_argument('--source_list', default='./source_list.txt', type=str, help='set path to source list')
 options = parser.parse_args()
 
 # Define and read input file
@@ -235,7 +236,7 @@ for line in input_lines:
 	in_file = in_path+'/'+obsid+'/'+target+'.uv'
 	out_file = in_path+'/'+obsid+'/'+target+'.uv.cal'
 	if not os.path.exists(out_file):
-		uvcat_input = {'vis':infile,
+		uvcat_input = {'vis':in_file,
 				'out':out_file}
 		miriad.uvcat(**uvcat_input)
 
@@ -377,6 +378,11 @@ for line in input_lines:
 	source_index = 0
 	for source in sources:
 
+		 # Check that this source is in the observation
+		if 'obsid' in sources.colnames:
+ 			if (obsid not in source['obsid']) and ('all' not in source['obsid']):
+ 				continue
+
 		# Create source position object
 		source_coord = SkyCoord(ra=source['ra'],dec=source['dec'],unit=(u.hourangle, u.deg),frame='icrs')
 
@@ -469,7 +475,7 @@ for line in input_lines:
 
 		# Find position of source peak continuum
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln.fits'
-		peak_flux, peak_coord = find_peak(source_coord,in_file,box_size=11)
+		peak_flux, peak_coord = find_peak(source_coord,in_file,box_size=option.box_size)
 
 
 		## -- Continuum Subtraction -- ##
@@ -531,7 +537,7 @@ for line in input_lines:
 
 		# calculate image noise
 		sigest_input = {'In':map_file,
-		        'region':'box(0,0,128,128)'}
+				'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
 		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
 
@@ -579,7 +585,7 @@ for line in input_lines:
 					'cutoff':'%f'%(5.*image_noise),
 					'niters':'1e6',
 					'speed':'0'}
-			if mask_succes:
+			if mask_success:
 				clean_input['region'] = 'mask(%s)'%(mask_file)
 			miriad.clean(**clean_input)
 
