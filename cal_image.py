@@ -17,7 +17,7 @@ import argparse
 
 # Set user options
 parser = argparse.ArgumentParser()
-parser.add_argument('--box_size', type=int, help='size of box to find positon of source peak')
+parser.add_argument('--box_size', default=11, type=int, help='size of box to find positon of source peak')
 parser.add_argument('--input_file', type=str, help='set path to input file')
 parser.add_argument('--source_list', default='./source_list.txt', type=str, help='set path to source list')
 options = parser.parse_args()
