@@ -377,7 +377,7 @@ for line in input_lines:
 
 		# Check that this source is in the observation
 		if 'obsid' in sources.colnames:
-			if (obsid not in source['obsid']) and ('all' not in source['obsid']):
+			if (obsid not in str(source['obsid'])) and ('all' not in str(source['obsid'])):
 				continue
 
 		# Create source position object
