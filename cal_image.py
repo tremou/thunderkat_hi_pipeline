@@ -475,7 +475,7 @@ for line in input_lines:
 
 		# Find position of source peak continuum
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln.fits'
-		peak_flux, peak_coord = find_peak(source_coord,in_file,box_size=option.box_size)
+		peak_flux, peak_coord = find_peak(source_coord,in_file,box_size=options.box_size)
 
 
 		## -- Continuum Subtraction -- ##
