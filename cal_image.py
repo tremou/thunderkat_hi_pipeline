@@ -106,9 +106,9 @@ for line in input_lines:
 	# Define reference antenna
 	refant = int(line['refant'])
 
+	'''
 	## -- Common data preparation -- ##
 	for name in names:
-
 		# Convert to MIRIAD UVFITS format
 		in_file = in_path+'/'+obsid+'/'+name+'.fits'
 		out_file = in_path+'/'+obsid+'/'+name+'.uv'
@@ -118,14 +118,12 @@ for line in input_lines:
 				'out':out_file,
 				'velocity':'lsr'}
 			miriad.fits(**fits_input)
-
 		# Flag auto correlations
 		in_file = in_path+'/'+obsid+'/'+name+'.uv'
 		uvflag_input = {'vis':in_file,
 			'select':'auto',
 			'flagval':'flag'}
 		miriad.uvflag(**uvflag_input)
-
 		# Additional flags
 		if os.path.exists(in_path+'/'+obsid+'/uvflag.txt'):
 			flags = ascii.read(in_path+'/'+obsid+'/uvflag.txt', format='commented_header', comment='#')
@@ -134,25 +132,19 @@ for line in input_lines:
 					'select':str(flag['select']),
 					'flagval':'flag'}
 				miriad.uvflag(**uvflag_input)
-
 		# Add 1934-638 to header information for flux model
 		if '193' in name:
 			miriad.puthd(In=in_path+'/'+obsid+'/'+name+'.uv/source',
 					value='%s'%('1934-638'))
-
 		# Add HI rest frequency to header information
 		miriad.puthd(In=in_path+'/'+obsid+'/'+name+'.uv/restfreq',
 				value=HI_FREQ*1.e-3)
-
-
 	## -- Calibrate bandpass calibrator data -- ##
-
 	# Flag Galactic HI line channels
 	uvflag_input = {'vis':in_path+'/'+obsid+'/'+bpass_cal+'.uv',
 		'line':'channel,%d,%d,1,1'%(hi_chans[1]-hi_chans[0],hi_chans[0]),
 		'flagval':'flag'}
 	miriad.uvflag(**uvflag_input)
-
 	# Use MFCAL to solve for bandpass and gains
 	mfcal_input = {'vis':in_path+'/'+obsid+'/'+bpass_cal+'.uv',
 		'stokes':'xx,yy',
@@ -160,22 +152,18 @@ for line in input_lines:
 		'interval':'1,1,1e6',
 		'options':'interpolate'}
 	miriad.mfcal(**mfcal_input)
-
 	# Smooth bandpass solution
 	# gpedit_input = {'vis':in_path+'/'+obsid+'/'+bpass_cal+'.uv',
 	#	'options':'hanning',
 	#	'width':10}
 	# miriad.gpedit(**gpedit_input)
-
 	## -- Calibrate flux calibrator data -- ##
 	if flux_cal != bpass_cal:
-
 		# Flag Galactic HI line channels
 		uvflag_input = {'vis':in_path+'/'+obsid+'/'+flux_cal+'.uv',
 			'line':'channel,%d,%d,1,1'%(hi_chans[1]-hi_chans[0],hi_chans[0]),
 			'flagval':'flag'}
 		miriad.uvflag(**uvflag_input)
-
 		# Use MFCAL to solve for bandpass and gains (note we don't use bandpass calibrator here)
 		mfcal_input = {'vis':in_path+'/'+obsid+'/'+flux_cal+'.uv',
 			'stokes':'xx,yy',
@@ -183,26 +171,20 @@ for line in input_lines:
 			'interval':'1,1,1e6',
 			'options':'interpolate'}
 		miriad.mfcal(**mfcal_input)
-
 		# Smooth bandpass solution
 		# gpedit_input = {'vis':in_path+'/'+obsid+'/'+flux_cal+'.uv',
         #		'options':'hanning',
         #		'width':10}
 		# miriad.gpedit(**gpedit_input)
-
-
 	## -- Calibrate gain calibrator data -- ##
 	if (gain_cal != flux_cal):
-
 		if (gain_cal != bpass_cal):
-
 			# Copy bandpass solution from bandpass calibrator
 			gpcopy_input = {'vis':in_path+'/'+obsid+'/'+bpass_cal+'.uv',
 				'out':in_path+'/'+obsid+'/'+gain_cal+'.uv',
 				'mode':'copy',
 				'options':'nocal,nopol'}
 			miriad.gpcopy(**gpcopy_input)
-
 			# Use MFCAL to solve for time varying gains 
 			mfcal_input = {'vis':in_path+'/'+obsid+'/'+gain_cal+'.uv',
 				'stokes':'xx,yy',
@@ -210,26 +192,20 @@ for line in input_lines:
 				'interval':'5,5',
 				'options':'nopassol'}
 			miriad.mfcal(**mfcal_input)
-
 		# Correct flux scale
 		gpboot_input = {'vis':in_path+'/'+obsid+'/'+gain_cal+'.uv',
 			'cal':in_path+'/'+obsid+'/'+flux_cal+'.uv'}
 		miriad.gpboot(**gpboot_input)
-
 		# Correct spectral slope based on flux cal model (probably overkill)
 		# mfboot_input = {'vis':in_path+'/'+obsid+'/'+flux_cal+'.uv,'+in_path+'/'+obsid+'/'+gain_cal+'.uv',
 		#	'select':'source(1934-638)'}
 		# miriad.mfboot(**mfboot_input)
-
-
 	## -- Copy and apply bandpass and time-varying gain solutions to the target data -- ##
-
 	# Copy solutions from gain calibrator
 	gpcopy_input = {'vis':in_path+'/'+obsid+'/'+gain_cal+'.uv',
 				'out':in_path+'/'+obsid+'/'+target+'.uv',
 				'mode':'copy'}
 	miriad.gpcopy(**gpcopy_input)
-
 	# Apply solutions
 	in_file = in_path+'/'+obsid+'/'+target+'.uv'
 	out_file = in_path+'/'+obsid+'/'+target+'.uv.cal'
@@ -237,15 +213,12 @@ for line in input_lines:
 		uvcat_input = {'vis':in_file,
 				'out':out_file}
 		miriad.uvcat(**uvcat_input)
-
-
 	## -- Selfcal loop -- ##
 	selfcal_intervals = [] # [2,2]
 	selfcal_nfbins = [] # [1,1]
 	selfcal_options = [] # ['phase','phase']
 	selfcal_ind = 0
 	for selfcal_ind in range(0,len(selfcal_intervals)):
-
 		# image
 		vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal'
 		map_file = in_path+'/'+obsid+'/'+target+'.mfs.imap.cal%d' % (selfcal_ind)
@@ -262,13 +235,11 @@ for line in input_lines:
 				'mode':'fft',
 				'slop':'1,interpolate'}
 			miriad.invert(**invert_input)
-
-		# Calculate image noise
+		# calculate image noise
 		sigest_input = {'In':map_file,
 			'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
 		image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
-
 		# clean
 		out_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (selfcal_ind)
 		if not os.path.exists(out_file):
@@ -281,7 +252,6 @@ for line in input_lines:
 				'niters':'1e6',
 				'speed':'0'}
 			miriad.clean(**clean_input)
-
 		# restor
 		out_file = in_path+'/'+obsid+'/'+target+'.mfs.icln.cal%d' % (selfcal_ind)
 		model_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (selfcal_ind)
@@ -291,7 +261,6 @@ for line in input_lines:
 				'map':map_file,
 				'out':out_file}
 			miriad.restor(**restor_input)
-
 		# selfcal
 		vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal'
 		selfcal_input = {'vis':vis_file,
@@ -300,7 +269,6 @@ for line in input_lines:
 			'nfbin':'%f'%(selfcal_nfbins[selfcal_ind]),
 			'options':'%s'%(selfcal_options[selfcal_ind])}
 		miriad.selfcal(**selfcal_input)
-
 		if (selfcal_ind == len(selfcal_intervals)-1):
 			
 			# Apply selfcal solutions
@@ -313,10 +281,7 @@ for line in input_lines:
 				os.system('rm -rf %s' % (vis_file))
 				os.system('rsync -P -rte ssh %s/* %s' % (out_file, vis_file))
 				os.system('rm -rf %s' % (out_file))
-
-
 	## -- Final continuum image -- ##
-
 	# image
 	vis_file = in_path+'/'+obsid+'/'+target+'.uv.cal' 
 	map_file = in_path+'/'+obsid+'/'+target+'.mfs.imap.cal%d' % (len(selfcal_intervals))
@@ -333,13 +298,11 @@ for line in input_lines:
 					'mode':'fft',
 					'slop':'1,interpolate'}
 		miriad.invert(**invert_input)
-
 	# Calculate image noise
 	sigest_input = {'In':map_file,
 		'region':'box(0,0,128,128)'}
 	sigest_output = miriad.sigest(**sigest_input)
 	image_noise = float(sigest_output.split('\n')[-1].split(' ')[-1])
-
 	# clean
 	out_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (len(selfcal_intervals))
 	if not os.path.exists(out_file):
@@ -352,7 +315,6 @@ for line in input_lines:
 				'niters':'1e6',
 				'speed':'0'}
 		miriad.clean(**clean_input)
-
 	# restor
 	out_file = in_path+'/'+obsid+'/'+target+'.mfs.icln.cal%d' % (len(selfcal_intervals))
 	model_file = in_path+'/'+obsid+'/'+target+'.mfs.icmp.cal%d' % (len(selfcal_intervals))
@@ -362,6 +324,7 @@ for line in input_lines:
 				'map':map_file,
 				'out':out_file}
 		miriad.restor(**restor_input)
+	'''
 
 	## -- Loop over source list  --- ##
 
@@ -375,10 +338,10 @@ for line in input_lines:
 	source_index = 0
 	for source in sources:
 
-		# Check that this source is in the observation
+		 # Check that this source is in the observation
 		if 'obsid' in sources.colnames:
-			if (obsid not in str(source['obsid'])) and ('all' not in str(source['obsid'])):
-				continue
+ 			if (obsid not in str(source['obsid'])) and ('all' not in str(source['obsid'])):
+ 				continue
 
 		# Create source position object
 		source_coord = SkyCoord(ra=source['ra'],dec=source['dec'],unit=(u.hourangle, u.deg),frame='icrs')
@@ -432,7 +395,7 @@ for line in input_lines:
 					'slop':'1,interpolate'}
 			miriad.invert(**invert_input)
 
-		# Calculate image noise
+		# calculate image noise
 		sigest_input = {'In':map_file,
 			'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
@@ -472,7 +435,7 @@ for line in input_lines:
 
 		# Find position of source peak continuum
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln.fits'
-		peak_flux, peak_coord = find_peak(source_coord,in_file, box_size=options.box_size)
+		peak_flux, peak_coord = find_peak(source_coord,in_file,box_size=options.box_size)
 
 
 		## -- Continuum Subtraction -- ##
@@ -508,6 +471,7 @@ for line in input_lines:
 			miriad.uvlin(**uvlin_input)
 
 
+
 		## -- Spectral-line Imaging of source  --- ##		
 
 		# invert
@@ -531,7 +495,7 @@ for line in input_lines:
 					invert_input['select'] = '-uvrange(0,5)'
 			miriad.invert(**invert_input)
 
-		# Calculate image noise
+		# calculate image noise
 		sigest_input = {'In':map_file,
 				'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
