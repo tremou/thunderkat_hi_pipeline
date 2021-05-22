@@ -106,8 +106,6 @@ for line in input_lines:
 	# Define reference antenna
 	refant = int(line['refant'])
 
-	'''
-
 	## -- Common data preparation -- ##
 	for name in names:
 
@@ -265,7 +263,7 @@ for line in input_lines:
 				'slop':'1,interpolate'}
 			miriad.invert(**invert_input)
 
-		# calculate image noise
+		# Calculate image noise
 		sigest_input = {'In':map_file,
 			'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
@@ -364,7 +362,6 @@ for line in input_lines:
 				'map':map_file,
 				'out':out_file}
 		miriad.restor(**restor_input)
-	'''
 
 	## -- Loop over source list  --- ##
 
@@ -378,10 +375,10 @@ for line in input_lines:
 	source_index = 0
 	for source in sources:
 
-		 # Check that this source is in the observation
+		# Check that this source is in the observation
 		if 'obsid' in sources.colnames:
- 			if (obsid not in str(source['obsid'])) and ('all' not in str(source['obsid'])):
- 				continue
+			if (obsid not in str(source['obsid'])) and ('all' not in str(source['obsid'])):
+				continue
 
 		# Create source position object
 		source_coord = SkyCoord(ra=source['ra'],dec=source['dec'],unit=(u.hourangle, u.deg),frame='icrs')
@@ -435,7 +432,7 @@ for line in input_lines:
 					'slop':'1,interpolate'}
 			miriad.invert(**invert_input)
 
-		# calculate image noise
+		# Calculate image noise
 		sigest_input = {'In':map_file,
 			'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
@@ -475,7 +472,7 @@ for line in input_lines:
 
 		# Find position of source peak continuum
 		in_file = in_path+'/'+obsid+'/'+source_name+'.mfs.icln.fits'
-		peak_flux, peak_coord = find_peak(source_coord,in_file,box_size=options.box_size)
+		peak_flux, peak_coord = find_peak(source_coord,in_file, box_size=options.box_size)
 
 
 		## -- Continuum Subtraction -- ##
@@ -511,7 +508,6 @@ for line in input_lines:
 			miriad.uvlin(**uvlin_input)
 
 
-
 		## -- Spectral-line Imaging of source  --- ##		
 
 		# invert
@@ -535,7 +531,7 @@ for line in input_lines:
 					invert_input['select'] = '-uvrange(0,5)'
 			miriad.invert(**invert_input)
 
-		# calculate image noise
+		# Calculate image noise
 		sigest_input = {'In':map_file,
 				'region':'box(0,0,128,128)'}
 		sigest_output = miriad.sigest(**sigest_input)
