@@ -450,7 +450,7 @@ for line in input_lines:
 					'options':'subtract,mfs',
 					'out':out_file}
 			if fixed_vel_bins:
-					uvmodel_input['line'] = 'velocity,75,-200,5.6'
+					uvmodel_input['line'] = 'velocity,358,-1000,5.6'
 			miriad.uvmodel(**uvmodel_input)
 
 
@@ -464,8 +464,8 @@ for line in input_lines:
 					'mode':'line',
 					'options':'nowindow'}
 			if fixed_vel_bins:
-					uvlin_input['line'] = 'velocity,75,-200,5.6'
-					uvlin_input['chans'] = '0,18,54,1e9'
+					uvlin_input['line'] = 'velocity,358,-1000,5.6'
+					uvlin_input['chans'] = '0,143,214,1e9'
 			else:
 					uvlin_input['chans'] = '0,%d,%d,1e9' % (hi_chans[0],hi_chans[1]),
 			miriad.uvlin(**uvlin_input)
@@ -490,7 +490,7 @@ for line in input_lines:
 					'mode':'fft',
 					'slop':'1,zero'}
 			if fixed_vel_bins:
-					invert_input['line'] = 'velocity,75,-200,5.6'
+					invert_input['line'] = 'velocity,358,-1000,5.6'
 			if hi_filter:
 					invert_input['select'] = '-uvrange(0,5)'
 			miriad.invert(**invert_input)
