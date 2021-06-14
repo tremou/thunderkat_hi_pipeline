@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 # Set MIRIAD environment
-export MIR="/scratch/users/jallison/software/miriad/"
+export MIR="/scratch3/users/jallison/software/miriad/"
 export MIRARCH=linux64
 export MIRARCHD=$MIR/$MIRARCH
 export MIRBIN=$MIRARCHD/bin
@@ -24,10 +24,10 @@ export PGPLOT_FONT=$MIRLIB/grfont.dat
 export PGPLOT_RGB=$MIRLIB/rgb.txt
 
 # Set path to mirpy
-export MIRPY_DIR='/scratch/users/jallison/software/mirpy-0.2.0/'
+export MIRPY_DIR='/scratch3/users/jallison/software/mirpy-0.2.0/'
 
 # Add this directory to path
-export PIPELINE='/scratch/users/jallison/thunderkat/thunderkat_hi_pipeline/'
+export PIPELINE='/scratch3/users/jallison/thunderkat/thunderkat_hi_pipeline/'
 export PATH=$PATH:$PIPELINE
 
 # Set input file
