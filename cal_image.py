@@ -6,6 +6,7 @@
 import sys
 import os
 import numpy as np
+#sys.path.append("/users/tremou/.local/lib/python2.7/site-packages")
 sys.path.append(os.environ['MIRPY_DIR'])
 from mirpy import miriad
 from astropy.io import fits

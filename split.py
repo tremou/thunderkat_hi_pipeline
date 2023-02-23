@@ -1,7 +1,7 @@
 # Import modules
 import os
 import sys
-import numpy
+import numpy as np
 import glob
 from astropy.io import ascii
 

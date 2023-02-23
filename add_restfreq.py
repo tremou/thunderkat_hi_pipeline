@@ -1,7 +1,8 @@
 # Import modules
 import os
 import sys
-from pyrap.tables import table
+#from pyrap.tables import table
+from casacore.tables.table import table
 from astropy.io import ascii
 
 # Define and read input file
