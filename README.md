@@ -3,7 +3,7 @@
 The two txt files are for the source’s coords (source.txt) and the other is for the data information (j1848.txt) , resolution refant etc.. 
 Both need to be edited in the beginning. 
 
-The pipeline uses CASA 5.7.0-134 and python2.7 makes the following major steps: 
+The pipeline uses CASA version 5.7.0-134 and python2.7 makes the following major steps: 
 
 ```source 01.run_pipeline_idia.sc j1848.txt```
 - Copying part of the data locally (split) 
