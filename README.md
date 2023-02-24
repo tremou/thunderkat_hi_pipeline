@@ -1,6 +1,6 @@
 # thunderkat_hi_pipeline
 
-The two txt files are for the source’s coords (source list ) and the other is for the ms info , resolution refant etc.. 
+The two txt files are for the source’s coords (source.txt) and the other is for the data information (j1848.txt) , resolution refant etc.. 
 Both need to be edited in the beginning. 
 
 The pipeline uses CASA 5.7.0-134 and python2.7 makes the following major steps: 
