@@ -3,7 +3,7 @@
 The two txt files are for the source’s coords (source.txt) and the other (j1848.txt) are the inputs for the data information, resolution, refant etc.. 
 Both need to be edited in the beginning accordingly.
 
-The pipeline uses CASA version 5.7.0-134, python2.7 and MIRIAD. 
+The pipeline uses [CASA](https://casadocs.readthedocs.io/en/stable/) version 5.7.0-134, python2.7 and [MIRIAD](https://www.atnf.csiro.au/computing/software/miriad/doc/miriad.html). 
 The three following major steps need to be run seperately. 
 
 ```source 01.run_pipeline_idia.sc j1848.txt```
