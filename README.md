@@ -1,4 +1,4 @@
-# ThunderKAT_HI_IDIA_pipeline
+# ThunderKAT_HI_pipeline (ilifu/IDIA_setup)
 
 The two txt files are for the source’s coords (source.txt) and the other (j1848.txt) are the inputs for the data information, resolution, refant etc.. 
 Both need to be edited in the beginning accordingly.
