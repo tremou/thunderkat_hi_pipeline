@@ -1,6 +1,6 @@
 # ThunderKAT_HI_pipeline (ilifu/IDIA_setup)
 
-The two txt files are for the source’s coords (source.txt) and the other (j1848.txt) are the inputs for the data information, resolution, refant etc.. 
+The two txt files are for the source’s coords (source_list.txt) and the other (j1848.txt) are the inputs for the data information, resolution, refant etc.. 
 Both need to be edited in the beginning accordingly.
 
 The pipeline uses [CASA](https://casadocs.readthedocs.io/en/stable/) version 5.7.0-134, python2.7, [MIRIAD](https://www.atnf.csiro.au/computing/software/miriad/doc/miriad.html) and [mirpy](https://github.com/radio-astro/mirpy) which is a [MIRIAD](https://www.atnf.csiro.au/computing/software/miriad/doc/miriad.html) python wrapper. 
