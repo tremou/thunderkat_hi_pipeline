@@ -33,7 +33,7 @@ It calls the cal_image.py python script performing the following steps:
   - continuum imaging (clean) and self calibration of the target and the list of teh sources listed in the source_list.txt file. 
   - continuum subtraction
   - spectral line imaging
-  - spectra extraction into an ascii file (.dat)
+  - spectra extraction into an ascii file (*_spectrum.dat)
   
 The expected output products are freqeuncy cubes, images of the target and reference sources and the spectra ascii file. 
 
