@@ -27,7 +27,7 @@ export PGPLOT_RGB=$MIRLIB/rgb.txt
 export MIRPY_DIR='/scratch3/users/tremou/soft/mirpy-master/mirpy'
 
 # Add this directory to path
-export PIPELINE='/scratch3/users/tremou/soft/thunderkat_hi_pipeline/'
+export PIPELINE='/scratch3/users/tremou/soft/thunderkat_hi_pipeline-idia_j1848/'
 export PATH=$PATH:$PIPELINE
 
 # Set input file
